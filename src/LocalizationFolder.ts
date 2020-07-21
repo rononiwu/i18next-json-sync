@@ -77,7 +77,7 @@ export default class LocalizationFolder {
 	public getSourceObject() {
 		let source: Object;
 		Object.keys(this.files).forEach(name => {
-			if (path.basename(name, '.json') === this.primaryLanguage) {
+			if (path.basename(name, '.json') === this.primaryLanguage || path.dirname(name).split('/').pop() === this.primaryLanguage) {
 				source = this.files[name];
 			}
 		});

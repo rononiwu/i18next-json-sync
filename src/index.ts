@@ -83,7 +83,10 @@ export default function sync({
 	function groupFilesByDirectory(allFiles: string[]) {
 		const directories: DirectoryMap = {};
 		for (const filename of allFiles) {
-			const directory = path.dirname(filename);
+			var directory= path.dirname(filename);
+			if(filename.match('((?:locales)\/[^\/]+\/[^\/]+(?:.json)$)')){
+				directory = directory.substr(0, directory.lastIndexOf("/"));
+			}
 			directories[directory] = directories[directory] || {};
 			directories[directory][filename] = null;
 		}
@@ -91,7 +94,10 @@ export default function sync({
 	}
 
 	function normalizeLanguageFromFilename(filename: string) {
-		return path.basename(filename, '.json').replace(/-/g, '_').toLowerCase();
+		if(filename.match('((?:locales)\/[^\/]+\/[^\/]+(?:.json)$)')){
+            return path.dirname(filename).split('/').pop();
+        }
+    	return path.basename(filename, '.json').replace(/-/g, '_').toLowerCase();
 	}
 
 	function syncObjects(source: Object, target: Object) {
