@@ -1,5 +1,6 @@
 import * as glob from 'glob';
 import * as path from 'path';
+import * as utils from './utils';
 import ActionRecorder from './ActionRecorder';
 import LocalizationFolder from './LocalizationFolder';
 import pluralForms from './pluralForms';
@@ -83,9 +84,9 @@ export default function sync({
 	function groupFilesByDirectory(allFiles: string[]) {
 		const directories: DirectoryMap = {};
 		for (const filename of allFiles) {
-			var directory= path.dirname(filename);
-			if(filename.match('((?:locales)\/[^\/]+\/[^\/]+(?:.json)$)')){
-				directory = directory.substr(0, directory.lastIndexOf("/"));
+			let directory= path.dirname(filename);
+			if(utils.hasLanguageOnPathName(filename)){
+				directory = directory.substr(0, directory.lastIndexOf('/'));
 			}
 			directories[directory] = directories[directory] || {};
 			directories[directory][filename] = null;
@@ -94,10 +95,10 @@ export default function sync({
 	}
 
 	function normalizeLanguageFromFilename(filename: string) {
-		if(filename.match('((?:locales)\/[^\/]+\/[^\/]+(?:.json)$)')){
-            return path.dirname(filename).split('/').pop();
-        }
-    	return path.basename(filename, '.json').replace(/-/g, '_').toLowerCase();
+		if(utils.hasLanguageOnPathName(filename)){
+			return path.dirname(filename).split('/').pop();
+		}
+		return path.basename(filename, '.json').replace(/-/g, '_').toLowerCase();
 	}
 
 	function syncObjects(source: Object, target: Object) {
