@@ -50,7 +50,6 @@ export default function sync({
 		const folder = new LocalizationFolder(directories[currentDirectory], primaryLanguage, isReportMode);
 		folder.populateFromDisk(createFiles);
 		const sourceObject = folder.getSourceObject();
-
 		if (!sourceObject) {
 			continue;
 		}
@@ -85,7 +84,7 @@ export default function sync({
 		const directories: DirectoryMap = {};
 		for (const filename of allFiles) {
 			let directory= path.dirname(filename);
-			if(utils.hasLanguageOnPathName(filename)){
+			if(utils.hasLanguageOnPathName(filename)) {
 				directory = directory.substr(0, directory.lastIndexOf('/'));
 			}
 			directories[directory] = directories[directory] || {};
@@ -95,7 +94,7 @@ export default function sync({
 	}
 
 	function normalizeLanguageFromFilename(filename: string) {
-		if(utils.hasLanguageOnPathName(filename)){
+		if(utils.hasLanguageOnPathName(filename)) {
 			return path.dirname(filename).split('/').pop();
 		}
 		return path.basename(filename, '.json').replace(/-/g, '_').toLowerCase();
